@@ -8,6 +8,7 @@ import { isFavorite, toggleFavorite } from "../lib/favorites";
 import { getMaxSeverity } from "../lib/settings";
 import { WORDS } from "../data";
 import { CurseWord } from "../data/types";
+import { colors, fonts, radii, shadow, spacing, typography } from "../theme";
 
 export function TodayScreen() {
   const [word, setWord] = useState<CurseWord>(() => getWordOfDay());
@@ -43,37 +44,55 @@ export function TodayScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.label}>WORD OF THE DAY</Text>
-        <Text style={styles.term}>{word.term}</Text>
-        {word.transliteration ? (
-          <Text style={styles.transliteration}>{word.transliteration}</Text>
-        ) : null}
-        <Text style={styles.locale}>
-          {word.language} · {word.region}
-        </Text>
 
-        <View style={styles.badgeRow}>
-          <SeverityBadge severity={word.severity} />
+        <View style={styles.heroCard}>
+          <Text style={styles.term}>{word.term}</Text>
+          {word.transliteration ? (
+            <Text style={styles.transliteration}>{word.transliteration}</Text>
+          ) : null}
+          <Text style={styles.locale}>
+            {word.language} · {word.region}
+          </Text>
+          <View style={styles.badgeRow}>
+            <SeverityBadge severity={word.severity} />
+          </View>
         </View>
 
-        {word.pronunciation ? (
-          <Section title="Pronunciation" body={word.pronunciation} />
-        ) : null}
-        <Section title="Literal meaning" body={word.literalMeaning} />
-        <Section title="Origin" body={word.origin} />
-        <Section title="What it really means" body={word.meaning} />
-        <Section title="How it's used" body={word.usageNote} />
-        {word.exampleSentence ? (
-          <Section title="Example" body={word.exampleSentence} />
-        ) : null}
+        <View style={styles.detailCard}>
+          {word.pronunciation ? (
+            <Section title="Pronunciation" body={word.pronunciation} />
+          ) : null}
+          <Section title="Literal meaning" body={word.literalMeaning} />
+          <Section title="Origin" body={word.origin} />
+          <Section title="What it really means" body={word.meaning} />
+          <Section title="How it's used" body={word.usageNote} last={!word.exampleSentence} />
+          {word.exampleSentence ? (
+            <Section title="Example" body={word.exampleSentence} last />
+          ) : null}
+        </View>
 
         <View style={styles.actionRow}>
-          <Pressable style={styles.actionButton} onPress={onToggleFavorite}>
-            <Text style={styles.actionButtonText}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.actionButton,
+              styles.actionButtonSecondary,
+              pressed && styles.actionButtonSecondaryPressed,
+            ]}
+            onPress={onToggleFavorite}
+          >
+            <Text style={styles.actionButtonSecondaryText}>
               {favorite ? "★ Favorited" : "☆ Favorite"}
             </Text>
           </Pressable>
-          <Pressable style={styles.actionButton} onPress={onShare}>
-            <Text style={styles.actionButtonText}>Share</Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.actionButton,
+              styles.actionButtonPrimary,
+              pressed && styles.actionButtonPrimaryPressed,
+            ]}
+            onPress={onShare}
+          >
+            <Text style={styles.actionButtonPrimaryText}>Share</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -81,9 +100,9 @@ export function TodayScreen() {
   );
 }
 
-function Section({ title, body }: { title: string; body: string }) {
+function Section({ title, body, last }: { title: string; body: string; last?: boolean }) {
   return (
-    <View style={styles.section}>
+    <View style={[styles.section, last && styles.sectionLast]}>
       <Text style={styles.sectionTitle}>{title}</Text>
       <Text style={styles.sectionBody}>{body}</Text>
     </View>
@@ -91,36 +110,67 @@ function Section({ title, body }: { title: string; body: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f6f6f8" },
-  content: { padding: 20, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: colors.background },
+  content: { padding: spacing.xl, paddingBottom: 40 },
   label: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#999",
-    letterSpacing: 1,
-    marginBottom: 6,
+    ...typography.label,
+    marginBottom: spacing.sm,
   },
-  term: { fontSize: 34, fontWeight: "800", color: "#1a1a1a" },
-  transliteration: { fontSize: 16, color: "#666", marginTop: 2 },
-  locale: { fontSize: 15, color: "#555", marginTop: 6, marginBottom: 12 },
-  badgeRow: { marginBottom: 16 },
-  section: { marginBottom: 16 },
+  heroCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    padding: spacing.xl,
+    marginBottom: spacing.lg,
+    ...shadow.card,
+  },
+  // No fontFamily on term/transliteration — they can be in any script, so
+  // they stay on the system default font rather than the app's Latin
+  // display typeface.
+  term: { fontSize: 34, fontWeight: "800", color: colors.textPrimary },
+  transliteration: { fontSize: 16, color: colors.textSecondary, marginTop: 2 },
+  locale: {
+    fontSize: 15,
+    fontFamily: fonts.bodyMedium,
+    color: colors.textSecondary,
+    marginTop: 6,
+    marginBottom: spacing.md,
+  },
+  badgeRow: {},
+  detailCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    padding: spacing.xl,
+    marginBottom: spacing.lg,
+    ...shadow.card,
+  },
+  section: { marginBottom: spacing.lg },
+  sectionLast: { marginBottom: 0 },
   sectionTitle: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#999",
-    letterSpacing: 0.5,
-    marginBottom: 4,
-    textTransform: "uppercase",
+    ...typography.label,
+    marginBottom: spacing.xs,
   },
-  sectionBody: { fontSize: 15, color: "#333", lineHeight: 21 },
-  actionRow: { flexDirection: "row", gap: 12, marginTop: 12 },
+  sectionBody: {
+    fontSize: 15,
+    fontFamily: fonts.body,
+    color: colors.textPrimary,
+    opacity: 0.85,
+    lineHeight: 21,
+  },
+  actionRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.xs },
   actionButton: {
     flex: 1,
-    backgroundColor: "#1a1a1a",
-    paddingVertical: 14,
-    borderRadius: 12,
+    paddingVertical: spacing.md + 2,
+    borderRadius: radii.pill,
     alignItems: "center",
   },
-  actionButtonText: { color: "#fff", fontWeight: "700" },
+  actionButtonPrimary: { backgroundColor: colors.primary },
+  actionButtonPrimaryPressed: { backgroundColor: colors.primaryDark },
+  actionButtonPrimaryText: { color: colors.white, fontFamily: fonts.bodyBold },
+  actionButtonSecondary: {
+    backgroundColor: colors.cream,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  actionButtonSecondaryPressed: { backgroundColor: colors.border },
+  actionButtonSecondaryText: { color: colors.textPrimary, fontFamily: fonts.bodyBold },
 });

@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { colors, fonts } from "../theme";
 
 export function HeaderBrand() {
   return (
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: "800",
-    color: "#1a1a1a",
+    fontFamily: fonts.heading,
+    color: colors.textPrimary,
   },
 });

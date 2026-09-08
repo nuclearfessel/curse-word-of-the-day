@@ -12,6 +12,7 @@ import {
 import { WordCard } from "../components/WordCard";
 import { getMaxSeverity } from "../lib/settings";
 import { Severity } from "../data/types";
+import { colors, fonts, radii, shadow, spacing } from "../theme";
 
 function ListScreen({
   title,
@@ -30,7 +31,10 @@ function ListScreen({
         data={items}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <Pressable style={styles.row} onPress={() => onSelect(item)}>
+          <Pressable
+            style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+            onPress={() => onSelect(item)}
+          >
             <Text style={styles.rowText}>{item}</Text>
             <Text style={styles.chevron}>›</Text>
           </Pressable>
@@ -109,19 +113,27 @@ export function BrowseWordsScreen({ route, navigation }: WordsProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f6f6f8" },
-  title: { fontSize: 26, fontWeight: "800", color: "#1a1a1a", padding: 20, paddingBottom: 8 },
-  listContent: { paddingHorizontal: 20, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: colors.background },
+  title: {
+    fontSize: 26,
+    fontFamily: fonts.display,
+    color: colors.textPrimary,
+    padding: spacing.xl,
+    paddingBottom: spacing.sm,
+  },
+  listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
   row: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.lg,
     marginVertical: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    ...shadow.card,
   },
-  rowText: { fontSize: 16, color: "#1a1a1a", fontWeight: "600" },
-  chevron: { fontSize: 20, color: "#bbb" },
+  rowPressed: { backgroundColor: colors.cream },
+  rowText: { fontSize: 16, color: colors.textPrimary, fontFamily: fonts.bodySemiBold },
+  chevron: { fontSize: 20, color: colors.primary, fontFamily: fonts.bodyBold },
 });

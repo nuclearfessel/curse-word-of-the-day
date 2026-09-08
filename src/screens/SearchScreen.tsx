@@ -7,6 +7,7 @@ import { WordCard } from "../components/WordCard";
 import { getMaxSeverity } from "../lib/settings";
 import { Severity } from "../data/types";
 import { SearchStackParamList } from "../navigation/types";
+import { colors, fonts, radii, spacing } from "../theme";
 
 export function SearchScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<SearchStackParamList>>();
@@ -31,7 +32,7 @@ export function SearchScreen() {
         <TextInput
           style={styles.input}
           placeholder="Type a word, language, or region…"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textMuted}
           value={query}
           onChangeText={setQuery}
           autoCapitalize="none"
@@ -65,24 +66,29 @@ export function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f6f6f8" },
-  header: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 8 },
-  title: { fontSize: 26, fontWeight: "800", color: "#1a1a1a", marginBottom: 12 },
+  container: { flex: 1, backgroundColor: colors.background },
+  header: { paddingHorizontal: spacing.xl, paddingTop: spacing.md, paddingBottom: spacing.sm },
+  title: { fontSize: 26, fontFamily: fonts.display, color: colors.textPrimary, marginBottom: spacing.md },
+  // No fontFamily here — the user may type in any script, so the input
+  // stays on the system default font rather than the app's Latin body font.
   input: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    backgroundColor: colors.surface,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
     fontSize: 16,
-    color: "#1a1a1a",
+    color: colors.textPrimary,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  listContent: { paddingHorizontal: 20, paddingBottom: 40 },
+  listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
   emptyText: {
-    marginTop: 24,
+    marginTop: spacing.xxl,
     textAlign: "center",
-    color: "#888",
+    color: colors.textSecondary,
+    fontFamily: fonts.body,
     fontSize: 14,
     lineHeight: 20,
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.lg,
   },
 });
