@@ -4,6 +4,7 @@ import { Pressable } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { getWordOfDay } from "../lib/wordOfDay";
 import { SeverityBadge } from "../components/SeverityBadge";
+import { FavoritesIcon } from "../components/icons";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
 import { getMaxSeverity } from "../lib/settings";
 import { WORDS } from "../data";
@@ -88,8 +89,13 @@ export function TodayScreen() {
             ]}
             onPress={onToggleFavorite}
           >
+            <FavoritesIcon
+              color={colors.textPrimary}
+              filled={favorite}
+              size={16}
+            />
             <Text style={styles.actionButtonSecondaryText}>
-              {favorite ? "★ Favorited" : "☆ Favorite"}
+              {favorite ? "Favorited" : "Favorite"}
             </Text>
           </Pressable>
           <Pressable
@@ -182,9 +188,12 @@ function createStyles(
     actionRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.xs },
     actionButton: {
       flex: 1,
+      flexDirection: "row",
+      gap: spacing.xs + 2,
       paddingVertical: spacing.md + 2,
       borderRadius: radii.pill,
       alignItems: "center",
+      justifyContent: "center",
     },
     actionButtonPrimary: { backgroundColor: colors.primary },
     actionButtonPrimaryPressed: { backgroundColor: colors.primaryDark },

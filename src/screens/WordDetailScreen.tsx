@@ -4,6 +4,7 @@ import { useFocusEffect, RouteProp } from "@react-navigation/native";
 import { WordDetailParams } from "../navigation/types";
 import { getWordById } from "../data";
 import { SeverityBadge } from "../components/SeverityBadge";
+import { FavoritesIcon } from "../components/icons";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
 import { useAppTheme } from "../ThemeContext";
 import { ThemeColors, buildShadow, buildTypography, fonts, radii, spacing } from "../theme";
@@ -85,8 +86,13 @@ export function WordDetailScreen({ route }: Props) {
             ]}
             onPress={onToggleFavorite}
           >
+            <FavoritesIcon
+              color={colors.textPrimary}
+              filled={favorite}
+              size={16}
+            />
             <Text style={styles.actionButtonSecondaryText}>
-              {favorite ? "★ Favorited" : "☆ Favorite"}
+              {favorite ? "Favorited" : "Favorite"}
             </Text>
           </Pressable>
           <Pressable
@@ -176,9 +182,12 @@ function createStyles(
     actionRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.xs },
     actionButton: {
       flex: 1,
+      flexDirection: "row",
+      gap: spacing.xs + 2,
       paddingVertical: spacing.md + 2,
       borderRadius: radii.pill,
       alignItems: "center",
+      justifyContent: "center",
     },
     actionButtonPrimary: { backgroundColor: colors.primary },
     actionButtonPrimaryPressed: { backgroundColor: colors.primaryDark },
