@@ -4,10 +4,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { BrowseStackParamList } from "../navigation/types";
 import {
-  getWorldAreas,
-  getLanguagesInArea,
+  getLanguages,
   getRegionsForLanguage,
   getWordsForRegion,
+  hasSingleRegion,
 } from "../data";
 import { WordCard } from "../components/WordCard";
 import { getMaxSeverity } from "../lib/settings";
@@ -48,44 +48,39 @@ function ListScreen({
   );
 }
 
-type WorldAreasProps = NativeStackScreenProps<BrowseStackParamList, "WorldAreas">;
-export function BrowseWorldAreasScreen({ navigation }: WorldAreasProps) {
-  return (
-    <ListScreen
-      title="World regions"
-      items={getWorldAreas()}
-      onSelect={(worldArea) => navigation.navigate("Languages", { worldArea })}
-    />
-  );
-}
-
 type LanguagesProps = NativeStackScreenProps<BrowseStackParamList, "Languages">;
-export function BrowseLanguagesScreen({ route, navigation }: LanguagesProps) {
-  const { worldArea } = route.params;
+export function BrowseLanguagesScreen({ navigation }: LanguagesProps) {
   return (
     <ListScreen
-      title={worldArea}
-      items={getLanguagesInArea(worldArea)}
-      onSelect={(language) => navigation.navigate("Regions", { worldArea, language })}
+      title="Languages"
+      items={getLanguages()}
+      onSelect={(language) => {
+        if (hasSingleRegion(language)) {
+          const [region] = getRegionsForLanguage(language);
+          navigation.navigate("Words", { language, region });
+        } else {
+          navigation.navigate("Regions", { language });
+        }
+      }}
     />
   );
 }
 
 type RegionsProps = NativeStackScreenProps<BrowseStackParamList, "Regions">;
 export function BrowseRegionsScreen({ route, navigation }: RegionsProps) {
-  const { worldArea, language } = route.params;
+  const { language } = route.params;
   return (
     <ListScreen
       title={language}
-      items={getRegionsForLanguage(worldArea, language)}
-      onSelect={(region) => navigation.navigate("Words", { worldArea, language, region })}
+      items={getRegionsForLanguage(language)}
+      onSelect={(region) => navigation.navigate("Words", { language, region })}
     />
   );
 }
 
 type WordsProps = NativeStackScreenProps<BrowseStackParamList, "Words">;
 export function BrowseWordsScreen({ route, navigation }: WordsProps) {
-  const { worldArea, language, region } = route.params;
+  const { language, region } = route.params;
   const [maxSeverity, setMaxSeverity] = useState<Severity>(4);
   const { colors, shadow } = useAppTheme();
   const styles = useMemo(() => createStyles(colors, shadow), [colors, shadow]);
@@ -96,13 +91,12 @@ export function BrowseWordsScreen({ route, navigation }: WordsProps) {
     }, [])
   );
 
-  const words = getWordsForRegion(worldArea, language, region).filter(
-    (w) => w.severity <= maxSeverity
-  );
+  const words = getWordsForRegion(language, region).filter((w) => w.severity <= maxSeverity);
+  const title = hasSingleRegion(language) ? language : region;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>{region}</Text>
+      <Text style={styles.title}>{title}</Text>
       <FlatList
         contentContainerStyle={styles.listContent}
         data={words}

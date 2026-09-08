@@ -23,7 +23,8 @@ export function FavoritesScreen() {
         if (cancelled) return;
         const found = ids
           .map((id) => getWordById(id))
-          .filter((w): w is CurseWord => Boolean(w));
+          .filter((w): w is CurseWord => Boolean(w))
+          .sort((a, b) => a.term.localeCompare(b.term));
         setWords(found);
       });
       return () => {
