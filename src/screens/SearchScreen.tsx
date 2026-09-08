@@ -7,12 +7,15 @@ import { WordCard } from "../components/WordCard";
 import { getMaxSeverity } from "../lib/settings";
 import { Severity } from "../data/types";
 import { SearchStackParamList } from "../navigation/types";
-import { colors, fonts, radii, spacing } from "../theme";
+import { useAppTheme } from "../ThemeContext";
+import { ThemeColors, fonts, radii, spacing } from "../theme";
 
 export function SearchScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<SearchStackParamList>>();
   const [query, setQuery] = useState("");
   const [maxSeverity, setMaxSeverity] = useState<Severity>(4);
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   useFocusEffect(
     useCallback(() => {
@@ -65,30 +68,37 @@ export function SearchScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: spacing.xl, paddingTop: spacing.md, paddingBottom: spacing.sm },
-  title: { fontSize: 26, fontFamily: fonts.display, color: colors.textPrimary, marginBottom: spacing.md },
-  // No fontFamily here — the user may type in any script, so the input
-  // stays on the system default font rather than the app's Latin body font.
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: radii.pill,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    fontSize: 16,
-    color: colors.textPrimary,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
-  emptyText: {
-    marginTop: spacing.xxl,
-    textAlign: "center",
-    color: colors.textSecondary,
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    paddingHorizontal: spacing.lg,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    header: { paddingHorizontal: spacing.xl, paddingTop: spacing.md, paddingBottom: spacing.sm },
+    title: {
+      fontSize: 26,
+      fontFamily: fonts.display,
+      color: colors.textPrimary,
+      marginBottom: spacing.md,
+    },
+    // No fontFamily here — the user may type in any script, so the input
+    // stays on the system default font rather than the app's Latin body font.
+    input: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.pill,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      fontSize: 16,
+      color: colors.textPrimary,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
+    emptyText: {
+      marginTop: spacing.xxl,
+      textAlign: "center",
+      color: colors.textSecondary,
+      fontFamily: fonts.body,
+      fontSize: 14,
+      lineHeight: 20,
+      paddingHorizontal: spacing.lg,
+    },
+  });
+}

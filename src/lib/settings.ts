@@ -1,10 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Severity } from "../data/types";
+import { ThemeMode } from "../theme";
 
 const DISCLAIMER_KEY = "settings:disclaimerSeen:v1";
 const MAX_SEVERITY_KEY = "settings:maxSeverity:v1";
 const NOTIFICATIONS_KEY = "settings:notificationsEnabled:v1";
 const NOTIFICATION_HOUR_KEY = "settings:notificationHour:v1";
+const THEME_MODE_KEY = "settings:themeMode:v1";
 
 export async function getDisclaimerSeen(): Promise<boolean> {
   return (await AsyncStorage.getItem(DISCLAIMER_KEY)) === "true";
@@ -39,4 +41,13 @@ export async function getNotificationHour(): Promise<number> {
 
 export async function setNotificationHour(hour: number): Promise<void> {
   await AsyncStorage.setItem(NOTIFICATION_HOUR_KEY, String(hour));
+}
+
+export async function getThemeMode(): Promise<ThemeMode> {
+  const raw = await AsyncStorage.getItem(THEME_MODE_KEY);
+  return raw === "light" || raw === "dark" ? raw : "system";
+}
+
+export async function setThemeMode(mode: ThemeMode): Promise<void> {
+  await AsyncStorage.setItem(THEME_MODE_KEY, mode);
 }

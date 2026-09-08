@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, Pressable, SafeAreaView, StyleSheet, Text } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -12,7 +12,8 @@ import {
 import { WordCard } from "../components/WordCard";
 import { getMaxSeverity } from "../lib/settings";
 import { Severity } from "../data/types";
-import { colors, fonts, radii, shadow, spacing } from "../theme";
+import { useAppTheme } from "../ThemeContext";
+import { ThemeColors, buildShadow, fonts, radii, spacing } from "../theme";
 
 function ListScreen({
   title,
@@ -23,6 +24,9 @@ function ListScreen({
   items: string[];
   onSelect: (item: string) => void;
 }) {
+  const { colors, shadow } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors, shadow), [colors, shadow]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -83,6 +87,8 @@ type WordsProps = NativeStackScreenProps<BrowseStackParamList, "Words">;
 export function BrowseWordsScreen({ route, navigation }: WordsProps) {
   const { worldArea, language, region } = route.params;
   const [maxSeverity, setMaxSeverity] = useState<Severity>(4);
+  const { colors, shadow } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors, shadow), [colors, shadow]);
 
   useFocusEffect(
     useCallback(() => {
@@ -112,28 +118,30 @@ export function BrowseWordsScreen({ route, navigation }: WordsProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  title: {
-    fontSize: 26,
-    fontFamily: fonts.display,
-    color: colors.textPrimary,
-    padding: spacing.xl,
-    paddingBottom: spacing.sm,
-  },
-  listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
-  row: {
-    backgroundColor: colors.surface,
-    borderRadius: radii.lg,
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.lg,
-    marginVertical: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    ...shadow.card,
-  },
-  rowPressed: { backgroundColor: colors.cream },
-  rowText: { fontSize: 16, color: colors.textPrimary, fontFamily: fonts.bodySemiBold },
-  chevron: { fontSize: 20, color: colors.primary, fontFamily: fonts.bodyBold },
-});
+function createStyles(colors: ThemeColors, shadow: ReturnType<typeof buildShadow>) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    title: {
+      fontSize: 26,
+      fontFamily: fonts.display,
+      color: colors.textPrimary,
+      padding: spacing.xl,
+      paddingBottom: spacing.sm,
+    },
+    listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
+    row: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.lg,
+      paddingVertical: spacing.lg,
+      paddingHorizontal: spacing.lg,
+      marginVertical: 5,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      ...shadow.card,
+    },
+    rowPressed: { backgroundColor: colors.cream },
+    rowText: { fontSize: 16, color: colors.textPrimary, fontFamily: fonts.bodySemiBold },
+    chevron: { fontSize: 20, color: colors.primary, fontFamily: fonts.bodyBold },
+  });
+}

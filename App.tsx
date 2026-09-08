@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
+import { DarkTheme, DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import {
@@ -18,11 +18,12 @@ import {
 import { TabNavigator } from "./src/navigation/TabNavigator";
 import { DisclaimerModal } from "./src/components/DisclaimerModal";
 import { getDisclaimerSeen, setDisclaimerSeen } from "./src/lib/settings";
-import { colors } from "./src/theme";
+import { ThemeProvider, useAppTheme } from "./src/ThemeContext";
 
-export default function App() {
+function AppContent() {
   const [loading, setLoading] = useState(true);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const { colors, resolvedScheme } = useAppTheme();
   const [fontsLoaded] = useFonts({
     PlayfairDisplay_600SemiBold,
     PlayfairDisplay_700Bold,
@@ -47,21 +48,54 @@ export default function App() {
 
   if (loading || !fontsLoaded) {
     return (
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </SafeAreaView>
-      </SafeAreaProvider>
+      <SafeAreaView style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </SafeAreaView>
     );
   }
 
+  const navigationTheme =
+    resolvedScheme === "dark"
+      ? {
+          ...DarkTheme,
+          colors: {
+            ...DarkTheme.colors,
+            background: colors.background,
+            card: colors.surface,
+            text: colors.textPrimary,
+            border: colors.border,
+            primary: colors.primary,
+          },
+        }
+      : {
+          ...DefaultTheme,
+          colors: {
+            ...DefaultTheme.colors,
+            background: colors.background,
+            card: colors.surface,
+            text: colors.textPrimary,
+            border: colors.border,
+            primary: colors.primary,
+          },
+        };
+
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
+    <>
+      <NavigationContainer theme={navigationTheme}>
         <TabNavigator />
       </NavigationContainer>
       <DisclaimerModal visible={showDisclaimer} onAccept={onAcceptDisclaimer} />
-      <StatusBar style="auto" />
+      <StatusBar style={resolvedScheme === "dark" ? "light" : "dark"} />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
@@ -71,6 +105,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.background,
   },
 });

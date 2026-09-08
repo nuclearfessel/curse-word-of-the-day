@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Alert, Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import {
@@ -16,15 +16,23 @@ import {
   cancelDailyReminder,
 } from "../lib/notifications";
 import { Severity, SEVERITY_LABELS } from "../data/types";
-import { colors, fonts, radii, shadow, spacing } from "../theme";
+import { useAppTheme } from "../ThemeContext";
+import { ThemeColors, ThemeMode, buildShadow, fonts, radii, spacing } from "../theme";
 
 const SEVERITY_OPTIONS: Severity[] = [1, 2, 3, 4];
 const HOUR_OPTIONS = [8, 9, 12, 18, 20];
+const THEME_OPTIONS: { mode: ThemeMode; label: string }[] = [
+  { mode: "light", label: "Light" },
+  { mode: "dark", label: "Dark" },
+  { mode: "system", label: "System" },
+];
 
 export function SettingsScreen() {
   const [maxSeverity, setMaxSeverityState] = useState<Severity>(4);
   const [notificationsEnabled, setNotificationsEnabledState] = useState(false);
   const [notificationHour, setNotificationHourState] = useState(9);
+  const { colors, shadow, mode, setMode } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors, shadow), [colors, shadow]);
 
   useFocusEffect(
     useCallback(() => {
@@ -93,6 +101,24 @@ export function SettingsScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Settings</Text>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Appearance</Text>
+          <Text style={styles.helperText}>Choose how Curse Word of the Day looks.</Text>
+          <View style={styles.chipRow}>
+            {THEME_OPTIONS.map((option) => (
+              <Pressable
+                key={option.mode}
+                style={[styles.chip, mode === option.mode && styles.chipActive]}
+                onPress={() => setMode(option.mode)}
+              >
+                <Text style={[styles.chipText, mode === option.mode && styles.chipTextActive]}>
+                  {option.label}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Daily reminder</Text>
@@ -169,36 +195,48 @@ function formatHour(hour: number): string {
   return `${displayHour}:00 ${period}`;
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.xl, paddingBottom: 40 },
-  title: { fontSize: 26, fontFamily: fonts.display, color: colors.textPrimary, marginBottom: spacing.xl },
-  section: {
-    backgroundColor: colors.surface,
-    borderRadius: radii.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-    ...shadow.card,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontFamily: fonts.bodyBold,
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
-  },
-  helperText: { fontSize: 13, fontFamily: fonts.body, color: colors.textSecondary, marginBottom: spacing.sm + 2 },
-  rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  rowLabel: { fontSize: 15, fontFamily: fonts.bodyMedium, color: colors.textPrimary },
-  chipRow: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm, marginTop: spacing.sm },
-  chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radii.pill,
-    backgroundColor: colors.cream,
-  },
-  chipActive: { backgroundColor: colors.primary },
-  chipText: { fontSize: 13, color: colors.textPrimary, fontFamily: fonts.bodySemiBold },
-  chipTextActive: { color: colors.white },
-  linkRow: { paddingVertical: spacing.sm + 2 },
-  linkText: { fontSize: 15, color: colors.primary, fontFamily: fonts.bodySemiBold },
-});
+function createStyles(colors: ThemeColors, shadow: ReturnType<typeof buildShadow>) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    content: { padding: spacing.xl, paddingBottom: 40 },
+    title: {
+      fontSize: 26,
+      fontFamily: fonts.display,
+      color: colors.textPrimary,
+      marginBottom: spacing.xl,
+    },
+    section: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+      ...shadow.card,
+    },
+    sectionTitle: {
+      fontSize: 14,
+      fontFamily: fonts.bodyBold,
+      color: colors.textPrimary,
+      marginBottom: spacing.sm,
+    },
+    helperText: {
+      fontSize: 13,
+      fontFamily: fonts.body,
+      color: colors.textSecondary,
+      marginBottom: spacing.sm + 2,
+    },
+    rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+    rowLabel: { fontSize: 15, fontFamily: fonts.bodyMedium, color: colors.textPrimary },
+    chipRow: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm, marginTop: spacing.sm },
+    chip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radii.pill,
+      backgroundColor: colors.cream,
+    },
+    chipActive: { backgroundColor: colors.primary },
+    chipText: { fontSize: 13, color: colors.textPrimary, fontFamily: fonts.bodySemiBold },
+    chipTextActive: { color: colors.white },
+    linkRow: { paddingVertical: spacing.sm + 2 },
+    linkText: { fontSize: 15, color: colors.primary, fontFamily: fonts.bodySemiBold },
+  });
+}
