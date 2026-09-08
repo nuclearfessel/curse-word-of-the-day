@@ -6,11 +6,13 @@ import Svg, { Path, SvgProps } from "react-native-svg";
 type IconProps = {
   size?: number;
   color?: string;
+  filled?: boolean;
 };
 
 function BaseIcon({
   size = 24,
   color = "#000",
+  filled = false,
   children,
 }: IconProps & { children: SvgProps["children"] }) {
   return (
@@ -18,7 +20,7 @@ function BaseIcon({
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={filled ? color : "none"}
       stroke={color}
       strokeWidth={2}
       strokeLinecap="round"
