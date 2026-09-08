@@ -1,13 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Share, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/types";
+import { useFocusEffect, RouteProp } from "@react-navigation/native";
+import { WordDetailParams } from "../navigation/types";
 import { getWordById } from "../data";
 import { SeverityBadge } from "../components/SeverityBadge";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
 
-type Props = NativeStackScreenProps<RootStackParamList, "WordDetail">;
+type Props = { route: RouteProp<{ WordDetail: WordDetailParams }, "WordDetail"> };
 
 export function WordDetailScreen({ route }: Props) {
   const { wordId } = route.params;

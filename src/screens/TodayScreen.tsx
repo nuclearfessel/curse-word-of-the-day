@@ -1,18 +1,15 @@
 import React, { useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { Pressable } from "react-native";
-import { useFocusEffect, useNavigation, NavigationProp } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { getWordOfDay } from "../lib/wordOfDay";
 import { SeverityBadge } from "../components/SeverityBadge";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
 import { getMaxSeverity } from "../lib/settings";
 import { WORDS } from "../data";
 import { CurseWord } from "../data/types";
-import { AppParamList } from "../navigation/types";
-import { AppHeader } from "../components/AppHeader";
 
 export function TodayScreen() {
-  const navigation = useNavigation<NavigationProp<AppParamList>>();
   const [word, setWord] = useState<CurseWord>(() => getWordOfDay());
   const [favorite, setFavorite] = useState(false);
 
@@ -45,7 +42,6 @@ export function TodayScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <AppHeader />
         <Text style={styles.label}>WORD OF THE DAY</Text>
         <Text style={styles.term}>{word.term}</Text>
         {word.transliteration ? (
