@@ -1,20 +1,51 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import { RootNavigator } from "./src/navigation/RootNavigator";
+import { DisclaimerModal } from "./src/components/DisclaimerModal";
+import { getDisclaimerSeen, setDisclaimerSeen } from "./src/lib/settings";
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+  useEffect(() => {
+    getDisclaimerSeen().then((seen) => {
+      setShowDisclaimer(!seen);
+      setLoading(false);
+    });
+  }, []);
+
+  const onAcceptDisclaimer = async () => {
+    await setDisclaimerSeen();
+    setShowDisclaimer(false);
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#1a1a1a" />
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+      <DisclaimerModal visible={showDisclaimer} onAccept={onAcceptDisclaimer} />
       <StatusBar style="auto" />
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  loadingContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f6f6f8",
   },
 });
