@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, fonts, radii, spacing } from "../theme";
+import { useAppTheme } from "../ThemeContext";
+import { ThemeColors, fonts, radii, spacing } from "../theme";
 
 export function DisclaimerModal({
   visible,
@@ -9,6 +10,9 @@ export function DisclaimerModal({
   visible: boolean;
   onAccept: () => void;
 }) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <Modal visible={visible} animationType="fade" transparent>
       <View style={styles.overlay}>
@@ -36,56 +40,58 @@ export function DisclaimerModal({
   );
 }
 
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(36,21,33,0.6)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: spacing.xl,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radii.lg,
-    padding: spacing.xl,
-    width: "100%",
-    maxWidth: 420,
-  },
-  logo: {
-    width: 56,
-    height: 56,
-    borderRadius: radii.md,
-    alignSelf: "center",
-    marginBottom: spacing.md,
-  },
-  title: {
-    fontSize: 22,
-    fontFamily: fonts.display,
-    marginBottom: spacing.md,
-    color: colors.textPrimary,
-    textAlign: "center",
-  },
-  body: {
-    fontSize: 14,
-    fontFamily: fonts.body,
-    color: colors.textPrimary,
-    opacity: 0.8,
-    lineHeight: 20,
-    marginBottom: spacing.md,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    borderRadius: radii.pill,
-    paddingVertical: spacing.md + 2,
-    alignItems: "center",
-    marginTop: spacing.xs,
-  },
-  buttonPressed: {
-    backgroundColor: colors.primaryDark,
-  },
-  buttonText: {
-    color: colors.white,
-    fontFamily: fonts.bodyBold,
-    fontSize: 15,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    overlay: {
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.6)",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: spacing.xl,
+    },
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.lg,
+      padding: spacing.xl,
+      width: "100%",
+      maxWidth: 420,
+    },
+    logo: {
+      width: 56,
+      height: 56,
+      borderRadius: radii.md,
+      alignSelf: "center",
+      marginBottom: spacing.md,
+    },
+    title: {
+      fontSize: 22,
+      fontFamily: fonts.display,
+      marginBottom: spacing.md,
+      color: colors.textPrimary,
+      textAlign: "center",
+    },
+    body: {
+      fontSize: 14,
+      fontFamily: fonts.body,
+      color: colors.textPrimary,
+      opacity: 0.8,
+      lineHeight: 20,
+      marginBottom: spacing.md,
+    },
+    button: {
+      backgroundColor: colors.primary,
+      borderRadius: radii.pill,
+      paddingVertical: spacing.md + 2,
+      alignItems: "center",
+      marginTop: spacing.xs,
+    },
+    buttonPressed: {
+      backgroundColor: colors.primaryDark,
+    },
+    buttonText: {
+      color: colors.white,
+      fontFamily: fonts.bodyBold,
+      fontSize: 15,
+    },
+  });
+}

@@ -14,7 +14,8 @@ import {
   FavoritesIcon,
   SettingsIcon,
 } from "../components/icons";
-import { colors, fonts } from "../theme";
+import { useAppTheme } from "../ThemeContext";
+import { fonts } from "../theme";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -26,6 +27,7 @@ const TAB_BAR_VERTICAL_PADDING = 8;
 export function TabNavigator() {
   const insets = useSafeAreaInsets();
   const bottomInset = Math.max(insets.bottom, TAB_BAR_VERTICAL_PADDING);
+  const { colors } = useAppTheme();
 
   return (
     <Tab.Navigator

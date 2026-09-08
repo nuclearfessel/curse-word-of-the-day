@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,11 +7,14 @@ import { getWordById } from "../data";
 import { CurseWord } from "../data/types";
 import { WordCard } from "../components/WordCard";
 import { FavoritesStackParamList } from "../navigation/types";
-import { colors, fonts, spacing } from "../theme";
+import { useAppTheme } from "../ThemeContext";
+import { ThemeColors, fonts, spacing } from "../theme";
 
 export function FavoritesScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<FavoritesStackParamList>>();
   const [words, setWords] = useState<CurseWord[]>([]);
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   useFocusEffect(
     useCallback(() => {
@@ -52,23 +55,25 @@ export function FavoritesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  title: {
-    fontSize: 26,
-    fontFamily: fonts.display,
-    color: colors.textPrimary,
-    padding: spacing.xl,
-    paddingBottom: spacing.sm,
-  },
-  listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
-  emptyText: {
-    marginTop: spacing.xxl,
-    textAlign: "center",
-    color: colors.textSecondary,
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    paddingHorizontal: spacing.lg,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    title: {
+      fontSize: 26,
+      fontFamily: fonts.display,
+      color: colors.textPrimary,
+      padding: spacing.xl,
+      paddingBottom: spacing.sm,
+    },
+    listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
+    emptyText: {
+      marginTop: spacing.xxl,
+      textAlign: "center",
+      color: colors.textSecondary,
+      fontFamily: fonts.body,
+      fontSize: 14,
+      lineHeight: 20,
+      paddingHorizontal: spacing.lg,
+    },
+  });
+}
