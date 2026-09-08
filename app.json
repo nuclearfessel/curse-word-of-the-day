@@ -25,6 +25,12 @@
     },
     "plugins": [
       "expo-sharing"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4354ff40-9568-4137-9e02-62f048e77b12"
+      }
+    },
+    "owner": "nuclearfessel"
   }
 }
