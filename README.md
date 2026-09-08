@@ -14,7 +14,7 @@ Built with [Expo](https://expo.dev) (React Native + TypeScript).
 
 Every entry includes the word in its native script, pronunciation, literal meaning, real-world usage/connotation, and etymology/origin — this app is meant to be a language and culture reference, not just a shock-value list.
 
-Currently covers 16 languages across 24 language/region pairs: Spanish (Mexico, Spain, Argentina, Chile, Colombia), French (France, Québec), German (Germany, Austria, Switzerland), Portuguese (Brazil, Portugal), Arabic (Egyptian, Levantine), Chinese (Mandarin, Cantonese), Hindi, Urdu, Tagalog, Vietnamese, Thai, Italian, Russian, and Polish.
+Currently covers 17 languages across 30 language/region pairs: English (Medieval, Early Modern, United States, United Kingdom, Ireland), Irish (Gaeilge), Spanish (Mexico, Spain, Argentina, Chile, Colombia), French (France, Québec), German (Germany, Austria, Switzerland), Portuguese (Brazil, Portugal), Arabic (Egyptian, Levantine), Chinese (Mandarin, Cantonese), Hindi, Urdu, Tagalog, Vietnamese, Thai, Italian, Russian, and Polish.
 
 ## Content sourcing
 
