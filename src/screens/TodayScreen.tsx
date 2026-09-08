@@ -9,6 +9,7 @@ import { getMaxSeverity } from "../lib/settings";
 import { WORDS } from "../data";
 import { CurseWord } from "../data/types";
 import { AppParamList } from "../navigation/types";
+import { AppHeader } from "../components/AppHeader";
 
 export function TodayScreen() {
   const navigation = useNavigation<NavigationProp<AppParamList>>();
@@ -44,6 +45,7 @@ export function TodayScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+        <AppHeader />
         <Text style={styles.label}>WORD OF THE DAY</Text>
         <Text style={styles.term}>{word.term}</Text>
         {word.transliteration ? (

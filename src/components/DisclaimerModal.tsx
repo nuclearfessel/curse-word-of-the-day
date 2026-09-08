@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 export function DisclaimerModal({
   visible,
@@ -12,7 +12,8 @@ export function DisclaimerModal({
     <Modal visible={visible} animationType="fade" transparent>
       <View style={styles.overlay}>
         <View style={styles.card}>
-          <Text style={styles.title}>Before you dive in</Text>
+          <Image source={require("../../assets/icon.png")} style={styles.logo} />
+          <Text style={styles.title}>Curse Word of the Day</Text>
           <Text style={styles.body}>
             Curse Word of the Day is a language and culture reference: it explores how
             profanity, slang, and taboo language vary across the world's languages and
@@ -46,11 +47,19 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 420,
   },
+  logo: {
+    width: 56,
+    height: 56,
+    borderRadius: 14,
+    alignSelf: "center",
+    marginBottom: 12,
+  },
   title: {
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 12,
     color: "#1a1a1a",
+    textAlign: "center",
   },
   body: {
     fontSize: 14,
