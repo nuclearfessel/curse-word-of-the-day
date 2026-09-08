@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { CurseWord, Severity } from "../data/types";
+import { hasSingleRegion } from "../data";
 import { SeverityBadge } from "./SeverityBadge";
 import { useAppTheme } from "../ThemeContext";
 import { ThemeColors, fonts, radii, buildShadow, spacing } from "../theme";
@@ -27,7 +28,7 @@ export function WordCard({ word, onPress }: { word: CurseWord; onPress: () => vo
           <View style={styles.termBlock}>
             <Text style={styles.term}>{word.term}</Text>
             <Text style={styles.subtitle}>
-              {word.language} · {word.region}
+              {hasSingleRegion(word.language) ? word.language : `${word.language} · ${word.region}`}
             </Text>
           </View>
           <SeverityBadge severity={word.severity} />

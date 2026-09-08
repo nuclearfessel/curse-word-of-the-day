@@ -7,7 +7,7 @@ import { SeverityBadge } from "../components/SeverityBadge";
 import { FavoritesIcon } from "../components/icons";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
 import { getMaxSeverity } from "../lib/settings";
-import { WORDS } from "../data";
+import { WORDS, hasSingleRegion } from "../data";
 import { CurseWord } from "../data/types";
 import { useAppTheme } from "../ThemeContext";
 import { ThemeColors, buildShadow, buildTypography, fonts, radii, spacing } from "../theme";
@@ -55,7 +55,7 @@ export function TodayScreen() {
             <Text style={styles.transliteration}>{word.transliteration}</Text>
           ) : null}
           <Text style={styles.locale}>
-            {word.language} · {word.region}
+            {hasSingleRegion(word.language) ? word.language : `${word.language} · ${word.region}`}
           </Text>
           <View style={styles.badgeRow}>
             <SeverityBadge severity={word.severity} />

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, RouteProp } from "@react-navigation/native";
 import { WordDetailParams } from "../navigation/types";
-import { getWordById } from "../data";
+import { getWordById, hasSingleRegion } from "../data";
 import { SeverityBadge } from "../components/SeverityBadge";
 import { FavoritesIcon } from "../components/icons";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
@@ -52,7 +52,7 @@ export function WordDetailScreen({ route }: Props) {
             <Text style={styles.transliteration}>{word.transliteration}</Text>
           ) : null}
           <Text style={styles.locale}>
-            {word.language} · {word.region}
+            {hasSingleRegion(word.language) ? word.language : `${word.language} · ${word.region}`}
           </Text>
           <View style={styles.badgeRow}>
             <SeverityBadge severity={word.severity} />

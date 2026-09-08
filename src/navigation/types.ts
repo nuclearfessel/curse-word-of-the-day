@@ -6,10 +6,9 @@ export type TodayStackParamList = {
 };
 
 export type BrowseStackParamList = {
-  WorldAreas: undefined;
-  Languages: { worldArea: string };
-  Regions: { worldArea: string; language: string };
-  Words: { worldArea: string; language: string; region: string };
+  Languages: undefined;
+  Regions: { language: string };
+  Words: { language: string; region: string };
   WordDetail: WordDetailParams;
 };
 
