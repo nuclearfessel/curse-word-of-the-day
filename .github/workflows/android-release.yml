@@ -46,6 +46,23 @@ jobs:
       - name: Download APK
         run: curl -L -o CurseWordOfTheDay.apk "${{ steps.artifact.outputs.url }}"
 
+      - name: Delete previous EAS builds for this profile
+        run: |
+          NEW_ID=$(node -e "const b=require('./build-output.json'); const build=Array.isArray(b)?b[0]:b; console.log(build.id);")
+          eas build:list --platform android --build-profile android-apk --non-interactive --json --limit 50 > all-builds.json
+          node -e "
+            const fs = require('fs');
+            const builds = JSON.parse(fs.readFileSync('all-builds.json'));
+            const ids = builds.map(b => b.id).filter(id => id !== '$NEW_ID');
+            fs.writeFileSync('old-build-ids.txt', ids.join('\n'));
+          "
+          while IFS= read -r id; do
+            if [ -n "$id" ]; then
+              echo "Deleting old build $id"
+              eas build:delete "$id" --non-interactive || true
+            fi
+          done < old-build-ids.txt
+
       - name: Publish rolling GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
