@@ -1,5 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabParamList } from "./types";
 import { TodayScreen } from "../screens/TodayScreen";
 import { BrowseScreen } from "../screens/BrowseScreen";
@@ -16,7 +17,15 @@ import {
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
+// Content area (icon + label + breathing room) that must stay clear of any
+// safe-area inset — verified visually at 50px (height - top/bottom padding).
+const TAB_BAR_CONTENT_HEIGHT = 66;
+const TAB_BAR_VERTICAL_PADDING = 8;
+
 export function TabNavigator() {
+  const insets = useSafeAreaInsets();
+  const bottomInset = Math.max(insets.bottom, TAB_BAR_VERTICAL_PADDING);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -24,7 +33,11 @@ export function TabNavigator() {
         tabBarActiveTintColor: "#1a1a1a",
         tabBarInactiveTintColor: "#999",
         tabBarLabelStyle: { fontSize: 11, fontWeight: "600" },
-        tabBarStyle: { height: 74, paddingTop: 8, paddingBottom: 16 },
+        tabBarStyle: {
+          height: TAB_BAR_CONTENT_HEIGHT + bottomInset,
+          paddingTop: TAB_BAR_VERTICAL_PADDING,
+          paddingBottom: bottomInset,
+        },
       }}
     >
       <Tab.Screen
