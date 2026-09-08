@@ -7,14 +7,14 @@ Built with [Expo](https://expo.dev) (React Native + TypeScript).
 ## Features (v1)
 
 - **Today** — a new word of the day, picked deterministically by date so everyone sees the same word.
-- **Browse** — drill down by world region → language → country/dialect.
+- **Browse** — drill down by language, then country/dialect (skipped automatically for languages spoken in only one place, like Tagalog or Japanese). Languages, countries, and words are all listed alphabetically.
 - **Search** — find a word by its native script, a romanized guess, or by language/region name.
-- **Favorites** — save words locally on your device.
+- **Favorites** — save words locally on your device, listed alphabetically.
 - **Settings** — daily reminder notification, a severity filter to hide the most extreme entries.
 
 Every entry includes the word in its native script, pronunciation, literal meaning, real-world usage/connotation, and etymology/origin — this app is meant to be a language and culture reference, not just a shock-value list.
 
-Currently covers 17 languages across 30 language/region pairs: English (Medieval, Early Modern, United States, United Kingdom, Ireland), Irish (Gaeilge), Spanish (Mexico, Spain, Argentina, Chile, Colombia), French (France, Québec), German (Germany, Austria, Switzerland), Portuguese (Brazil, Portugal), Arabic (Egyptian, Levantine), Chinese (Mandarin, Cantonese), Hindi, Urdu, Tagalog, Vietnamese, Thai, Italian, Russian, and Polish.
+Currently covers 26 languages across 39 language/region pairs: Arabic (Egyptian, Levantine), Chinese (Mandarin, Cantonese), Dutch, English (Medieval, Early Modern, United States, United Kingdom, Ireland), French (France, Québec), German (Germany, Austria, Switzerland), Hindi, Irish (Gaeilge), Italian, Japanese, Korean, Mongolian, Navajo, Polish, Portuguese (Brazil, Portugal), Russian, Spanish (Mexico, Spain, Argentina, Chile, Colombia), Swahili, Tagalog, Thai, Tibetan, Turkish, Urdu, Vietnamese, and Yoruba.
 
 ## Content sourcing
 
