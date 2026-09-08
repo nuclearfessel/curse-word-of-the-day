@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { RootNavigator } from "./src/navigation/RootNavigator";
@@ -24,20 +25,22 @@ export default function App() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#1a1a1a" />
-      </SafeAreaView>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#1a1a1a" />
+        </SafeAreaView>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <>
+    <SafeAreaProvider>
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
       <DisclaimerModal visible={showDisclaimer} onAccept={onAcceptDisclaimer} />
       <StatusBar style="auto" />
-    </>
+    </SafeAreaProvider>
   );
 }
 
