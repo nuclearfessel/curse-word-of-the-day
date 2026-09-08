@@ -2,11 +2,11 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabParamList } from "./types";
-import { TodayScreen } from "../screens/TodayScreen";
-import { BrowseScreen } from "../screens/BrowseScreen";
-import { SearchScreen } from "../screens/SearchScreen";
-import { FavoritesScreen } from "../screens/FavoritesScreen";
-import { SettingsScreen } from "../screens/SettingsScreen";
+import { TodayStack } from "./TodayStack";
+import { BrowseStack } from "./BrowseStack";
+import { SearchStack } from "./SearchStack";
+import { FavoritesStack } from "./FavoritesStack";
+import { SettingsStack } from "./SettingsStack";
 import {
   TodayIcon,
   BrowseIcon,
@@ -42,35 +42,35 @@ export function TabNavigator() {
     >
       <Tab.Screen
         name="Today"
-        component={TodayScreen}
+        component={TodayStack}
         options={{
           tabBarIcon: ({ color, size }) => <TodayIcon color={color} size={size} />,
         }}
       />
       <Tab.Screen
         name="Browse"
-        component={BrowseScreen}
+        component={BrowseStack}
         options={{
           tabBarIcon: ({ color, size }) => <BrowseIcon color={color} size={size} />,
         }}
       />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStack}
         options={{
           tabBarIcon: ({ color, size }) => <SearchIcon color={color} size={size} />,
         }}
       />
       <Tab.Screen
         name="Favorites"
-        component={FavoritesScreen}
+        component={FavoritesStack}
         options={{
           tabBarIcon: ({ color, size }) => <FavoritesIcon color={color} size={size} />,
         }}
       />
       <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
+        component={SettingsStack}
         options={{
           tabBarIcon: ({ color, size }) => <SettingsIcon color={color} size={size} />,
         }}

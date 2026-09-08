@@ -3,7 +3,7 @@ import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { RootNavigator } from "./src/navigation/RootNavigator";
+import { TabNavigator } from "./src/navigation/TabNavigator";
 import { DisclaimerModal } from "./src/components/DisclaimerModal";
 import { getDisclaimerSeen, setDisclaimerSeen } from "./src/lib/settings";
 
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <RootNavigator />
+        <TabNavigator />
       </NavigationContainer>
       <DisclaimerModal visible={showDisclaimer} onAccept={onAcceptDisclaimer} />
       <StatusBar style="auto" />

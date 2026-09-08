@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
-import { useFocusEffect, useNavigation, NavigationProp } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { searchWords } from "../lib/searchIndex";
 import { WordCard } from "../components/WordCard";
 import { getMaxSeverity } from "../lib/settings";
 import { Severity } from "../data/types";
-import { AppParamList } from "../navigation/types";
+import { SearchStackParamList } from "../navigation/types";
 
 export function SearchScreen() {
-  const navigation = useNavigation<NavigationProp<AppParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<SearchStackParamList>>();
   const [query, setQuery] = useState("");
   const [maxSeverity, setMaxSeverity] = useState<Severity>(4);
 

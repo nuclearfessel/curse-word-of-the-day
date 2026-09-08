@@ -1,3 +1,32 @@
+export type WordDetailParams = { wordId: string };
+
+export type TodayStackParamList = {
+  TodayHome: undefined;
+  WordDetail: WordDetailParams;
+};
+
+export type BrowseStackParamList = {
+  WorldAreas: undefined;
+  Languages: { worldArea: string };
+  Regions: { worldArea: string; language: string };
+  Words: { worldArea: string; language: string; region: string };
+  WordDetail: WordDetailParams;
+};
+
+export type SearchStackParamList = {
+  SearchHome: undefined;
+  WordDetail: WordDetailParams;
+};
+
+export type FavoritesStackParamList = {
+  FavoritesHome: undefined;
+  WordDetail: WordDetailParams;
+};
+
+export type SettingsStackParamList = {
+  SettingsHome: undefined;
+};
+
 export type TabParamList = {
   Today: undefined;
   Browse: undefined;
@@ -5,10 +34,3 @@ export type TabParamList = {
   Favorites: undefined;
   Settings: undefined;
 };
-
-export type RootStackParamList = {
-  Tabs: undefined;
-  WordDetail: { wordId: string };
-};
-
-export type AppParamList = TabParamList & RootStackParamList;

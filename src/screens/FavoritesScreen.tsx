@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
-import { useFocusEffect, useNavigation, NavigationProp } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getFavoriteIds } from "../lib/favorites";
 import { getWordById } from "../data";
 import { CurseWord } from "../data/types";
 import { WordCard } from "../components/WordCard";
-import { AppParamList } from "../navigation/types";
+import { FavoritesStackParamList } from "../navigation/types";
 
 export function FavoritesScreen() {
-  const navigation = useNavigation<NavigationProp<AppParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<FavoritesStackParamList>>();
   const [words, setWords] = useState<CurseWord[]>([]);
 
   useFocusEffect(
