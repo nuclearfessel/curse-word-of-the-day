@@ -14,6 +14,7 @@ import {
   FavoritesIcon,
   SettingsIcon,
 } from "../components/icons";
+import { colors, fonts } from "../theme";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -30,13 +31,15 @@ export function TabNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#1a1a1a",
-        tabBarInactiveTintColor: "#999",
-        tabBarLabelStyle: { fontSize: 11, fontWeight: "600" },
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
+        tabBarLabelStyle: { fontSize: 11, fontFamily: fonts.bodySemiBold },
         tabBarStyle: {
           height: TAB_BAR_CONTENT_HEIGHT + bottomInset,
           paddingTop: TAB_BAR_VERTICAL_PADDING,
           paddingBottom: bottomInset,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
         },
       }}
     >

@@ -1,8 +1,10 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { HeaderBrand } from "../components/HeaderBrand";
+import { ChevronLeftIcon } from "../components/icons";
+import { colors, radii, spacing } from "../theme";
 
 // Custom header (rather than native-stack's built-in one) so we can add
 // paddingTop for the real safe-area top inset ourselves. native-stack's
@@ -17,44 +19,50 @@ export function Header({ navigation, back }: NativeStackHeaderProps) {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.row}>
         {back ? (
-          <Pressable onPress={navigation.goBack} hitSlop={12} style={styles.backButton}>
-            <Text style={styles.backChevron}>‹</Text>
+          <Pressable
+            onPress={navigation.goBack}
+            hitSlop={12}
+            style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}
+          >
+            <ChevronLeftIcon color={colors.primary} size={22} />
           </Pressable>
         ) : (
           <View style={styles.backSpacer} />
         )}
         <HeaderBrand />
       </View>
+      <View style={styles.accentLine} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#e2e2e2",
+    backgroundColor: colors.surface,
   },
   row: {
-    height: 48,
+    height: 52,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 8,
+    paddingHorizontal: spacing.sm,
   },
   backButton: {
-    width: 32,
-    height: 32,
+    width: 34,
+    height: 34,
+    borderRadius: radii.pill,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 2,
+    marginRight: spacing.xs,
+    backgroundColor: colors.cream,
   },
-  backChevron: {
-    fontSize: 30,
-    lineHeight: 30,
-    color: "#1a1a1a",
-    marginTop: -2,
+  backButtonPressed: {
+    backgroundColor: colors.border,
   },
   backSpacer: {
-    width: 12,
+    width: 14,
+  },
+  accentLine: {
+    height: 3,
+    backgroundColor: colors.primary,
   },
 });

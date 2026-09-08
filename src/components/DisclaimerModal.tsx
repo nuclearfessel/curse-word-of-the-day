@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { colors, fonts, radii, spacing } from "../theme";
 
 export function DisclaimerModal({
   visible,
@@ -23,7 +24,10 @@ export function DisclaimerModal({
             The content is explicit by nature. By continuing you confirm you're old enough
             to view mature language content in your country.
           </Text>
-          <Pressable style={styles.button} onPress={onAccept}>
+          <Pressable
+            style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+            onPress={onAccept}
+          >
             <Text style={styles.buttonText}>I understand, continue</Text>
           </Pressable>
         </View>
@@ -35,48 +39,53 @@ export function DisclaimerModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.55)",
+    backgroundColor: "rgba(36,21,33,0.6)",
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
+    padding: spacing.xl,
   },
   card: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 24,
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    padding: spacing.xl,
     width: "100%",
     maxWidth: 420,
   },
   logo: {
     width: 56,
     height: 56,
-    borderRadius: 14,
+    borderRadius: radii.md,
     alignSelf: "center",
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 12,
-    color: "#1a1a1a",
+    fontSize: 22,
+    fontFamily: fonts.display,
+    marginBottom: spacing.md,
+    color: colors.textPrimary,
     textAlign: "center",
   },
   body: {
     fontSize: 14,
-    color: "#444",
+    fontFamily: fonts.body,
+    color: colors.textPrimary,
+    opacity: 0.8,
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   button: {
-    backgroundColor: "#1a1a1a",
-    borderRadius: 10,
-    paddingVertical: 14,
+    backgroundColor: colors.primary,
+    borderRadius: radii.pill,
+    paddingVertical: spacing.md + 2,
     alignItems: "center",
-    marginTop: 8,
+    marginTop: spacing.xs,
+  },
+  buttonPressed: {
+    backgroundColor: colors.primaryDark,
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "700",
+    color: colors.white,
+    fontFamily: fonts.bodyBold,
     fontSize: 15,
   },
 });

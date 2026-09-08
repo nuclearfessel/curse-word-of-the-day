@@ -7,6 +7,7 @@ import { getWordById } from "../data";
 import { CurseWord } from "../data/types";
 import { WordCard } from "../components/WordCard";
 import { FavoritesStackParamList } from "../navigation/types";
+import { colors, fonts, spacing } from "../theme";
 
 export function FavoritesScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<FavoritesStackParamList>>();
@@ -52,15 +53,22 @@ export function FavoritesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f6f6f8" },
-  title: { fontSize: 26, fontWeight: "800", color: "#1a1a1a", padding: 20, paddingBottom: 8 },
-  listContent: { paddingHorizontal: 20, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: colors.background },
+  title: {
+    fontSize: 26,
+    fontFamily: fonts.display,
+    color: colors.textPrimary,
+    padding: spacing.xl,
+    paddingBottom: spacing.sm,
+  },
+  listContent: { paddingHorizontal: spacing.xl, paddingBottom: 40 },
   emptyText: {
-    marginTop: 24,
+    marginTop: spacing.xxl,
     textAlign: "center",
-    color: "#888",
+    color: colors.textSecondary,
+    fontFamily: fonts.body,
     fontSize: 14,
     lineHeight: 20,
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.lg,
   },
 });

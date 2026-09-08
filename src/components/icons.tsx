@@ -69,6 +69,14 @@ export function SettingsIcon(props: IconProps) {
   );
 }
 
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <Path d="M15 6L9 12L15 18" />
+    </BaseIcon>
+  );
+}
+
 export function StarIcon(props: IconProps) {
   return (
     <BaseIcon {...props}>
