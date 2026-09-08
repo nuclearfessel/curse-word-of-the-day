@@ -35,7 +35,14 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build Android APK on EAS
-        run: eas build --platform android --profile android-apk --non-interactive --json > build-output.json
+        run: |
+          if ! eas build --platform android --profile android-apk --non-interactive --json > build-output.json; then
+            echo "Build failed, retrying once..."
+            eas build --platform android --profile android-apk --non-interactive --json > build-output.json
+          fi
+          # If this fails too, the step (and job) fails here, so every step
+          # below is skipped — the existing android-latest release and its
+          # EAS build are left untouched rather than replaced with nothing.
 
       - name: Extract build artifact URL
         id: artifact
