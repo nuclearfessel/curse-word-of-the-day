@@ -5560,7 +5560,7 @@ export const WORDS: CurseWord[] = [
     severity: 1,
   },
   {
-    id: "ur-pk-ullu",
+    id: "ur-pk-ullu-standalone",
     term: "الّو",
     transliteration: "ullu",
     language: "Urdu",
@@ -6557,7 +6557,7 @@ export const WORDS: CurseWord[] = [
     severity: 2,
   },
   {
-    id: "th-th-sat",
+    id: "th-th-sass",
     term: "สัส",
     transliteration: "sàt",
     language: "Thai",
