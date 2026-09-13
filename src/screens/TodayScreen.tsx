@@ -1,22 +1,20 @@
 import React, { useMemo, useState, useCallback } from "react";
-import { SafeAreaView, ScrollView, Share, StyleSheet, Text, View } from "react-native";
-import { Pressable } from "react-native";
+import { SafeAreaView, ScrollView, Share, StyleSheet, Text } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { getWordOfDay } from "../lib/wordOfDay";
-import { SeverityBadge } from "../components/SeverityBadge";
-import { FavoritesIcon } from "../components/icons";
+import { WordDetailView } from "../components/WordDetailView";
 import { isFavorite, toggleFavorite } from "../lib/favorites";
 import { getMaxSeverity } from "../lib/settings";
-import { WORDS, hasSingleRegion } from "../data";
+import { WORDS } from "../data";
 import { CurseWord } from "../data/types";
 import { useAppTheme } from "../ThemeContext";
-import { ThemeColors, buildShadow, buildTypography, fonts, radii, spacing } from "../theme";
+import { ThemeColors, buildTypography, spacing } from "../theme";
 
 export function TodayScreen() {
   const [word, setWord] = useState<CurseWord>(() => getWordOfDay());
   const [favorite, setFavorite] = useState(false);
-  const { colors, shadow, typography } = useAppTheme();
-  const styles = useMemo(() => createStyles(colors, shadow, typography), [colors, shadow, typography]);
+  const { colors, typography } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors, typography), [colors, typography]);
 
   useFocusEffect(
     useCallback(() => {
@@ -48,96 +46,18 @@ export function TodayScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.label}>WORD OF THE DAY</Text>
-
-        <View style={styles.heroCard}>
-          <Text style={styles.term}>{word.term}</Text>
-          {word.transliteration ? (
-            <Text style={styles.transliteration}>{word.transliteration}</Text>
-          ) : null}
-          <Text style={styles.locale}>
-            {hasSingleRegion(word.language) ? word.language : `${word.language} · ${word.region}`}
-          </Text>
-          <View style={styles.badgeRow}>
-            <SeverityBadge severity={word.severity} />
-          </View>
-        </View>
-
-        <View style={styles.detailCard}>
-          {word.pronunciation ? (
-            <Section styles={styles} title="Pronunciation" body={word.pronunciation} />
-          ) : null}
-          <Section styles={styles} title="Literal meaning" body={word.literalMeaning} />
-          <Section styles={styles} title="Origin" body={word.origin} />
-          <Section styles={styles} title="What it really means" body={word.meaning} />
-          <Section
-            styles={styles}
-            title="How it's used"
-            body={word.usageNote}
-            last={!word.exampleSentence}
-          />
-          {word.exampleSentence ? (
-            <Section styles={styles} title="Example" body={word.exampleSentence} last />
-          ) : null}
-        </View>
-
-        <View style={styles.actionRow}>
-          <Pressable
-            style={({ pressed }) => [
-              styles.actionButton,
-              styles.actionButtonSecondary,
-              pressed && styles.actionButtonSecondaryPressed,
-            ]}
-            onPress={onToggleFavorite}
-          >
-            <FavoritesIcon
-              color={colors.textPrimary}
-              filled={favorite}
-              size={16}
-            />
-            <Text style={styles.actionButtonSecondaryText}>
-              {favorite ? "Favorited" : "Favorite"}
-            </Text>
-          </Pressable>
-          <Pressable
-            style={({ pressed }) => [
-              styles.actionButton,
-              styles.actionButtonPrimary,
-              pressed && styles.actionButtonPrimaryPressed,
-            ]}
-            onPress={onShare}
-          >
-            <Text style={styles.actionButtonPrimaryText}>Share</Text>
-          </Pressable>
-        </View>
+        <WordDetailView
+          word={word}
+          favorite={favorite}
+          onToggleFavorite={onToggleFavorite}
+          onShare={onShare}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function Section({
-  styles,
-  title,
-  body,
-  last,
-}: {
-  styles: ReturnType<typeof createStyles>;
-  title: string;
-  body: string;
-  last?: boolean;
-}) {
-  return (
-    <View style={[styles.section, last && styles.sectionLast]}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <Text style={styles.sectionBody}>{body}</Text>
-    </View>
-  );
-}
-
-function createStyles(
-  colors: ThemeColors,
-  shadow: ReturnType<typeof buildShadow>,
-  typography: ReturnType<typeof buildTypography>
-) {
+function createStyles(colors: ThemeColors, typography: ReturnType<typeof buildTypography>) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
     content: { padding: spacing.xl, paddingBottom: 40 },
@@ -145,65 +65,5 @@ function createStyles(
       ...typography.label,
       marginBottom: spacing.sm,
     },
-    heroCard: {
-      backgroundColor: colors.surface,
-      borderRadius: radii.lg,
-      padding: spacing.xl,
-      marginBottom: spacing.lg,
-      ...shadow.card,
-    },
-    // No fontFamily on term/transliteration — they can be in any script, so
-    // they stay on the system default font rather than the app's Latin
-    // display typeface.
-    term: { fontSize: 34, fontWeight: "800", color: colors.textPrimary },
-    transliteration: { fontSize: 16, color: colors.textSecondary, marginTop: 2 },
-    locale: {
-      fontSize: 15,
-      fontFamily: fonts.bodyMedium,
-      color: colors.textSecondary,
-      marginTop: 6,
-      marginBottom: spacing.md,
-    },
-    badgeRow: {},
-    detailCard: {
-      backgroundColor: colors.surface,
-      borderRadius: radii.lg,
-      padding: spacing.xl,
-      marginBottom: spacing.lg,
-      ...shadow.card,
-    },
-    section: { marginBottom: spacing.lg },
-    sectionLast: { marginBottom: 0 },
-    sectionTitle: {
-      ...typography.label,
-      marginBottom: spacing.xs,
-    },
-    sectionBody: {
-      fontSize: 15,
-      fontFamily: fonts.body,
-      color: colors.textPrimary,
-      opacity: 0.85,
-      lineHeight: 21,
-    },
-    actionRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.xs },
-    actionButton: {
-      flex: 1,
-      flexDirection: "row",
-      gap: spacing.xs + 2,
-      paddingVertical: spacing.md + 2,
-      borderRadius: radii.pill,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    actionButtonPrimary: { backgroundColor: colors.primary },
-    actionButtonPrimaryPressed: { backgroundColor: colors.primaryDark },
-    actionButtonPrimaryText: { color: colors.white, fontFamily: fonts.bodyBold },
-    actionButtonSecondary: {
-      backgroundColor: colors.cream,
-      borderWidth: 1,
-      borderColor: colors.border,
-    },
-    actionButtonSecondaryPressed: { backgroundColor: colors.border },
-    actionButtonSecondaryText: { color: colors.textPrimary, fontFamily: fonts.bodyBold },
   });
 }
