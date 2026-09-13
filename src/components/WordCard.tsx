@@ -27,12 +27,17 @@ export function WordCard({ word, onPress }: { word: CurseWord; onPress: () => vo
         <View style={styles.row}>
           <View style={styles.termBlock}>
             <Text style={styles.term}>{word.term}</Text>
+            {word.transliteration ? (
+              <Text style={styles.transliteration}>{word.transliteration}</Text>
+            ) : null}
             <Text style={styles.subtitle}>
               {hasSingleRegion(word.language) ? word.language : `${word.language} · ${word.region}`}
             </Text>
           </View>
           <SeverityBadge severity={word.severity} />
         </View>
+        {word.pronunciation ? <Text style={styles.pronunciation}>{word.pronunciation}</Text> : null}
+        <Text style={styles.translation}>{word.literalMeaning}</Text>
         <Text style={styles.meaning} numberOfLines={2}>
           {word.meaning}
         </Text>
@@ -79,11 +84,28 @@ function createStyles(colors: ThemeColors, shadow: ReturnType<typeof buildShadow
       fontWeight: "800",
       color: colors.textPrimary,
     },
+    transliteration: {
+      fontSize: 13,
+      color: colors.textSecondary,
+      marginTop: 1,
+    },
     subtitle: {
       fontSize: 13,
       fontFamily: fonts.bodyMedium,
       color: colors.textSecondary,
       marginTop: 2,
+    },
+    pronunciation: {
+      fontSize: 12,
+      color: colors.textMuted,
+      marginTop: spacing.xs,
+    },
+    translation: {
+      fontSize: 14,
+      fontFamily: fonts.bodySemiBold,
+      color: colors.textPrimary,
+      marginTop: 2,
+      marginBottom: 2,
     },
     meaning: {
       fontSize: 14,
